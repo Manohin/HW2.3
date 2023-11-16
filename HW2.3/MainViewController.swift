@@ -21,6 +21,7 @@ final class MainViewController: UIViewController {
         label.textAlignment = .center
         label.font = UIFont(name: "Helvetica-bold", size: 20)
         label.text = "Имя Фамилия"
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -28,6 +29,7 @@ final class MainViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont(name: "Helvetica-bold", size: 12)
         label.text = "О себе"
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -131,15 +133,15 @@ final class MainViewController: UIViewController {
             
             firstPhotoCollectionImageView.topAnchor.constraint(equalTo: photosLabel.bottomAnchor, constant: 14),
             firstPhotoCollectionImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            firstPhotoCollectionImageView.widthAnchor.constraint(equalToConstant: 190),
-            firstPhotoCollectionImageView.heightAnchor.constraint(equalToConstant: 190),
+            firstPhotoCollectionImageView.widthAnchor.constraint(equalToConstant: view.bounds.width / 2 - 25),
+            firstPhotoCollectionImageView.heightAnchor.constraint(equalToConstant: view.bounds.width / 2 - 25),
             
             secondPhotoCollectionImageView.topAnchor.constraint(equalTo: photosLabel.bottomAnchor, constant: 14),
             secondPhotoCollectionImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            secondPhotoCollectionImageView.widthAnchor.constraint(equalToConstant: 190),
-            secondPhotoCollectionImageView.heightAnchor.constraint(equalToConstant: 190),
+            secondPhotoCollectionImageView.widthAnchor.constraint(equalToConstant: view.bounds.width / 2 - 25),
+            secondPhotoCollectionImageView.heightAnchor.constraint(equalToConstant: view.bounds.width / 2 - 25),
             
-            editButton.widthAnchor.constraint(equalToConstant: 390),
+            editButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             editButton.heightAnchor.constraint(equalToConstant: 59),
             editButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             editButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -64)
