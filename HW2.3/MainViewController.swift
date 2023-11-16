@@ -62,21 +62,12 @@ final class MainViewController: UIViewController {
         return label
     }()
     
-    lazy var firstPhotoCollectionImageView = {
-        let imageView = UIImageView(image: UIImage(named: "firstImage"))
-        imageView.contentMode = .scaleToFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 20
-        return imageView
-    }()
-    
-    lazy var secondPhotoCollectionImageView = {
-        let imageView = UIImageView(image: UIImage(named: "secondImage"))
-        imageView.contentMode = .scaleToFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 20
-        return imageView
-    }()
+    lazy var firstPhotoCollectionImageView = getPhotoView(
+        photoNamed: "firstImage"
+    )
+    lazy var secondPhotoCollectionImageView = getPhotoView(
+        photoNamed: "secondImage"
+    )
     
     lazy var editButton = {
         let button = UIButton()
@@ -146,5 +137,13 @@ final class MainViewController: UIViewController {
             editButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             editButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -64)
         ])
+    }
+    
+    private func getPhotoView(photoNamed: String) -> UIImageView {
+        let imageView = UIImageView(image: UIImage(named: photoNamed))
+        imageView.contentMode = .scaleToFill
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 20
+        return imageView
     }
 }
