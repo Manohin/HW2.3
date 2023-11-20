@@ -8,6 +8,42 @@
 import UIKit
 
 final class MainViewController: UIViewController {
+
+    lazy var hStack = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.spacing = 12
+        stack.addArrangedSubview(getPhotoView(photoNamed: "firstImage"))
+        stack.addArrangedSubview(getPhotoView(photoNamed: "secondImage"))
+      //  stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.distribution = .fillEqually
+        return stack
+    }()
+    
+    lazy var vStack = {
+       let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = 6
+        stack.alignment = .top
+        stack.addArrangedSubview(photosLabel)
+        stack.addArrangedSubview(hStack)
+        return stack
+    }()
+    
+    lazy var contentView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    lazy var scrollView = {
+        let scrollView = UIScrollView()
+        scrollView.alwaysBounceVertical = true
+        scrollView.contentInset = .zero
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentView)
+        return scrollView
+    }()
     
     lazy var photoImageView = {
         let imageView = UIImageView(image: UIImage(named: "photo"))
@@ -59,16 +95,10 @@ final class MainViewController: UIViewController {
         let label = UILabel()
         label.font = UIFont(name: "Helvetica-bold", size: 12)
         label.text = "Фото"
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    lazy var firstPhotoCollectionImageView = getPhotoView(
-        photoNamed: "firstImage"
-    )
-    lazy var secondPhotoCollectionImageView = getPhotoView(
-        photoNamed: "secondImage"
-    )
-    
+
     lazy var editButton = {
         let button = UIButton()
         button.backgroundColor = UIColor(red: 0.073, green: 0.318, blue: 0.794, alpha: 1)
@@ -81,6 +111,7 @@ final class MainViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         textBackgroundView.addSubview(aboutMeTextLabel)
+        view.addSubview(scrollView)
         setupViews()
     }
     
@@ -89,61 +120,65 @@ final class MainViewController: UIViewController {
          fullNameLabel,
          aboutMeLabel,
          textBackgroundView,
-         photosLabel,
-         firstPhotoCollectionImageView,
-         secondPhotoCollectionImageView,
-         editButton
+         editButton,
+         vStack
         ].forEach {
-            view.addSubview($0)
+            contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         NSLayoutConstraint.activate([
-            photoImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 79),
+            
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor, constant: -24),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            contentView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.heightAnchor),
+            
+            photoImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 79),
             photoImageView.widthAnchor.constraint(equalToConstant: 80),
             photoImageView.heightAnchor.constraint(equalToConstant: 80),
-            photoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            photoImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
             fullNameLabel.topAnchor.constraint(equalTo: photoImageView.bottomAnchor, constant: 19),
-            fullNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 119),
-            fullNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            fullNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 119),
+            fullNameLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             
-            aboutMeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 41),
+            aboutMeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             aboutMeLabel.topAnchor.constraint(equalTo: fullNameLabel.bottomAnchor, constant: 39),
             
             textBackgroundView.topAnchor.constraint(equalTo: aboutMeLabel.bottomAnchor, constant: 7),
-            textBackgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            textBackgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            textBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            textBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             
             aboutMeTextLabel.topAnchor.constraint(equalTo: textBackgroundView.topAnchor, constant: 20),
             aboutMeTextLabel.leadingAnchor.constraint(equalTo: textBackgroundView.leadingAnchor, constant: 15),
             aboutMeTextLabel.trailingAnchor.constraint(equalTo: textBackgroundView.trailingAnchor, constant: -15),
             aboutMeTextLabel.bottomAnchor.constraint(equalTo: textBackgroundView.bottomAnchor, constant: -20),
             
-            photosLabel.topAnchor.constraint(equalTo: textBackgroundView.bottomAnchor, constant: 52),
-            photosLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 41),
-            
-            firstPhotoCollectionImageView.topAnchor.constraint(equalTo: photosLabel.bottomAnchor, constant: 14),
-            firstPhotoCollectionImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            firstPhotoCollectionImageView.widthAnchor.constraint(equalToConstant: view.bounds.width / 2 - 25),
-            firstPhotoCollectionImageView.heightAnchor.constraint(equalToConstant: view.bounds.width / 2 - 25),
-            
-            secondPhotoCollectionImageView.topAnchor.constraint(equalTo: photosLabel.bottomAnchor, constant: 14),
-            secondPhotoCollectionImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            secondPhotoCollectionImageView.widthAnchor.constraint(equalToConstant: view.bounds.width / 2 - 25),
-            secondPhotoCollectionImageView.heightAnchor.constraint(equalToConstant: view.bounds.width / 2 - 25),
-            
-            editButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            vStack.topAnchor.constraint(equalTo: textBackgroundView.bottomAnchor, constant: 52),
+            vStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            vStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+        
+            editButton.topAnchor.constraint(equalTo: hStack.bottomAnchor, constant: 20),
+            editButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             editButton.heightAnchor.constraint(equalToConstant: 59),
-            editButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            editButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -64)
+            editButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            editButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -64)
         ])
     }
     
     private func getPhotoView(photoNamed: String) -> UIImageView {
         let imageView = UIImageView(image: UIImage(named: photoNamed))
-        imageView.contentMode = .scaleToFill
+        imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 20
         return imageView
     }
+    
 }
